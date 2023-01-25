@@ -1,0 +1,1 @@
+Repository for JSCasts Video regarding adding charts to a dashboard.
