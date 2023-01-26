@@ -3,6 +3,7 @@ import express from 'express';
 import AdminJSExpress from '@adminjs/express';
 import Adapter, { Database, Resource } from '@adminjs/sql';
 import importExportFeature from '@adminjs/import-export';
+import { ComponentLoader } from 'adminjs';
 
 const PORT = 3001;
 
@@ -23,6 +24,14 @@ const start = async () => {
 		database: 'Charts',
 	}).init();
 	
+
+// Adding componentLoader in order to override the dashboard
+	const componentLoader = new ComponentLoader()
+	
+	const Components = {
+		Dashboard: componentLoader.add('Dashboard', './dashboard'),
+	}
+
 	// We will need to create an instance of AdminJS with a basic resource fetched 
 	const admin = new AdminJS({
     resources: [
@@ -39,6 +48,10 @@ const start = async () => {
 				}
       },
     ],
+		componentLoader,
+		dashboard: {
+			component: Components.Dashboard
+		}
   });
 
 	const adminRouter = AdminJSExpress.buildRouter(admin);
